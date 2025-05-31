@@ -1,40 +1,56 @@
-# Project Overview
+# FluentFlow Translation App
 
 ## Description
 
-This is a modern web application built using cutting-edge frontend technologies. It offers a clean structure for scalable development and fast prototyping.
+FluentFlow is a modern, user-friendly web application for effortless language translation. It features a clean, responsive UI, light/dark theme toggle, text-to-speech, and clipboard support. The backend is powered by Python (Flask) and uses the OpenRouter API with the DeepSeek-R1 model for high-quality translations.
+
+## Features
+
+- Translate text between multiple languages using OpenRouter API
+- Light and dark theme toggle
+- Copy and speak (text-to-speech) for both input and output
+- Responsive, accessible, and modern UI
+- API key management via settings popup
+
+## Requirements
+
+- Python 3.8+
+- [Flask](https://flask.palletsprojects.com/) (`pip install flask`)
+- [requests](https://docs.python-requests.org/) (`pip install requests`)
+- An OpenRouter API key ([get one here](https://openrouter.ai/))
 
 ## Getting Started
 
-You can edit and run this project using any code editor of your choice. The project uses [Vite](https://vitejs.dev/) for fast development and build times.
+1. **Clone the repository:**
+   ```sh
+   git clone <YOUR_GIT_URL>
+   cd <YOUR_PROJECT_NAME>
+   ```
+2. **Install dependencies:**
+   ```sh
+   pip install flask requests
+   ```
+3. **Run the app:**
+   ```sh
+   python app.py
+   ```
+4. **Open your browser:**
+   Visit [http://localhost:5000](http://localhost:5000)
 
-### Requirements
+## Usage
 
-- Node.js & npm  
-  _We recommend using [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) for managing Node versions._
+- Click the settings (⚙️) button to enter your OpenRouter API key.
+- Enter text, select source and target languages, and click **Translate**.
+- Use **Copy** to copy text, and **Speak** to listen to the text aloud. You can stop speech at any time.
+- Toggle between light and dark themes using the theme button (🌙/☀️).
 
-- **OpenRouter API Key**  
-  _This project uses the OpenRouter API. You’ll need to sign up at [https://openrouter.ai](https://openrouter.ai) and generate an API key to access language model features._
-
-### Steps to Run Locally
-
-```sh
-# Step 1: Clone the repository
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install dependencies
-npm install
-
-# Step 4: Start the development server
-npm run dev
 ## Technologies Used
 
-This project is built using:
+- **Python (Flask)** – Backend server and API integration
+- **HTML5 & CSS3** – Responsive, modern UI
+- **JavaScript (ES6+)** – UI interactivity, AJAX, theme, and speech features
+- **OpenRouter API** – Language translation (DeepSeek-R1 model)
 
-- **Vite** – Fast frontend build tool  
-- **React** – JavaScript library for building user interfaces  
-- **TypeScript** – Strongly typed programming language  
-- **Tailwind CSS** – Utility-first CSS framework   
+---
+
+Feel free to customize, extend, or deploy this project as you wish!
