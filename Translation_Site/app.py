@@ -4,8 +4,6 @@ import os
 import re
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
-
-# Serve favicon
 @app.route('/Logo.ico')
 def favicon():
     return send_from_directory(app.static_folder, 'Logo.ico')
@@ -24,8 +22,6 @@ def translate():
 
     if not text or not api_key:
         return jsonify({'error': 'Missing text or API key'}), 400
-
-    # Prepare OpenRouter API request
     url = 'https://openrouter.ai/api/v1/chat/completions'
     headers = {
         'Authorization': f'Bearer {api_key}',
@@ -47,8 +43,6 @@ def translate():
         response.raise_for_status()
         data = response.json()
         translated = data['choices'][0]['message']['content']
-        # Remove leading context if present
-        # Common patterns to remove
         patterns = [
             r"^The translation from .+? is[:：\s]*",
             r"^Translation[:：\s]*",
@@ -58,7 +52,6 @@ def translate():
         for pat in patterns:
             translated = re.sub(pat, '', translated, flags=re.IGNORECASE)
         translated = translated.strip()
-        # Fallback: take only the first non-empty line if extra text remains
         if '\n' in translated:
             lines = [line.strip() for line in translated.split('\n') if line.strip()]
             if lines:

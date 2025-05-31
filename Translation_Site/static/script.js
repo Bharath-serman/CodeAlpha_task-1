@@ -11,17 +11,12 @@ const closeSettings = document.getElementById('closeSettings');
 const apiKeyInput = document.getElementById('apiKeyInput');
 const saveApiKey = document.getElementById('saveApiKey');
 const toast = document.getElementById('toast');
-
-// Copy and Listen buttons
 const copySourceBtn = document.getElementById('copySourceBtn');
 const copyTargetBtn = document.getElementById('copyTargetBtn');
 const listenSourceBtn = document.getElementById('listenSourceBtn');
 const listenTargetBtn = document.getElementById('listenTargetBtn');
 
-// Theme toggle logic
 const themeToggleBtn = document.getElementById('themeToggleBtn');
-
-// API Key storage (localStorage)
 function getApiKey() {
     return localStorage.getItem('openrouter_api_key') || '';
 }
@@ -29,7 +24,6 @@ function setApiKey(key) {
     localStorage.setItem('openrouter_api_key', key);
 }
 
-// Settings popup logic
 settingsBtn.onclick = () => {
     apiKeyInput.value = getApiKey();
     settingsPopup.classList.remove('hidden');
@@ -43,7 +37,6 @@ saveApiKey.onclick = () => {
     settingsPopup.classList.add('hidden');
 };
 
-// Swap languages
 swapBtn.onclick = () => {
     if (sourceLang.value === 'auto') {
         showToast('Cannot swap with auto-detect. Please select a specific source language.', true);
@@ -52,14 +45,11 @@ swapBtn.onclick = () => {
     const temp = sourceLang.value;
     sourceLang.value = targetLang.value;
     targetLang.value = temp;
-    // Optionally swap text
     const tempText = sourceText.value;
     sourceText.value = translatedText.value;
     translatedText.value = tempText;
 };
-
-// Translate button
-translateBtn.onclick = async () => {
+translateBtn.onclick = async () => {                      //Translation logic here.
     const text = sourceText.value.trim();
     if (!text) {
         showToast('Please enter some text to translate.', true);
@@ -97,8 +87,6 @@ translateBtn.onclick = async () => {
         translateBtn.textContent = 'Translate';
     }
 };
-
-// Copy and Listen buttons
 copySourceBtn.onclick = () => {
     if (sourceText.value.trim()) {
         navigator.clipboard.writeText(sourceText.value)
@@ -111,24 +99,48 @@ copyTargetBtn.onclick = () => {
             .then(() => showToast('Copied to clipboard!'));
     }
 };
+let speakingSource = false;
+let speakingTarget = false;
 
 listenSourceBtn.onclick = () => {
-    speakText(sourceText.value, sourceLang.value);
+    if (!speakingSource) {
+        if (!sourceText.value.trim()) return;
+        speakingSource = true;
+        listenSourceBtn.textContent = 'Stop';
+        const utter = new window.SpeechSynthesisUtterance(sourceText.value);
+        if (sourceLang.value && sourceLang.value !== 'auto') utter.lang = sourceLang.value;
+        utter.onend = utter.onerror = () => {
+            speakingSource = false;
+            listenSourceBtn.textContent = 'Speak';
+        };
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(utter);
+    } else {
+        window.speechSynthesis.cancel();
+        speakingSource = false;
+        listenSourceBtn.textContent = 'Speak';
+    }
 };
+
 listenTargetBtn.onclick = () => {
-    speakText(translatedText.value, targetLang.value);
+    if (!speakingTarget) {
+        if (!translatedText.value.trim()) return;
+        speakingTarget = true;
+        listenTargetBtn.textContent = 'Stop';
+        const utter = new window.SpeechSynthesisUtterance(translatedText.value);
+        if (targetLang.value && targetLang.value !== 'auto') utter.lang = targetLang.value;
+        utter.onend = utter.onerror = () => {
+            speakingTarget = false;
+            listenTargetBtn.textContent = 'Speak';
+        };
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(utter);
+    } else {
+        window.speechSynthesis.cancel();
+        speakingTarget = false;
+        listenTargetBtn.textContent = 'Speak';
+    }
 };
-
-function speakText(text, lang) {
-    if (!text.trim()) return;
-    const utter = new window.SpeechSynthesisUtterance(text);
-    // Try to set language if available
-    if (lang && lang !== 'auto') utter.lang = lang;
-    window.speechSynthesis.cancel(); // Stop any current speech
-    window.speechSynthesis.speak(utter);
-}
-
-// Toast notification
 function showToast(message, isError = false) {
     toast.textContent = message;
     const isDark = document.body.classList.contains('dark');
@@ -144,8 +156,6 @@ function showToast(message, isError = false) {
         toast.classList.add('hidden');
     }, 2500);
 }
-
-// Theme toggle logic
 function setTheme(dark) {
     document.body.classList.toggle('dark', dark);
     themeToggleBtn.textContent = dark ? '☀️' : '🌙';
@@ -157,5 +167,4 @@ function getPreferredTheme() {
 themeToggleBtn.onclick = () => {
     setTheme(!document.body.classList.contains('dark'));
 };
-// On load, set theme
 setTheme(getPreferredTheme() === 'dark'); 
