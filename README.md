@@ -23,8 +23,8 @@ FluentFlow is a modern, user-friendly web application for effortless language tr
 
 1. **Clone the repository:**
    ```sh
-   git clone <YOUR_GIT_URL>
-   cd <YOUR_PROJECT_NAME>
+   git clone https://github.com/Bharath-serman/CodeAlpha_task-1.git
+   cd CodeAlpha_task-1
    ```
 2. **Install dependencies:**
    ```sh
